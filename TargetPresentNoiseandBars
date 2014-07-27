@@ -90,9 +90,6 @@ SquareCount = 0;
             SquareCount = SquareCount + 1;
         end
         end
-        
-
-%FIX THIS PART
 BarsMade = 0;
 PreviouslyChosenGridCellNumbers = [NaN];
 while BarsMade < Bars
