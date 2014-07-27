@@ -1,0 +1,254 @@
+%  Copyright 2014 Michael V. Bronstein
+%  Licensed under the Apache License, Version 2.0 (the "License");
+%  you may not use this file except in compliance with the License.
+%  You may obtain a copy of the License at
+%  http://www.apache.org/licenses/LICENSE-2.0
+%  Unless required by applicable law or agreed to in writing, software
+%  distributed under the License is distributed on an "AS IS" BASIS,
+%  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%  See the License for the specific language governing permissions and
+%  limitations under the License.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function[h] = TargetPresentNoiseandBars(Noise, Bars)
+fullscreen = get(0,'ScreenSize');
+FigureNumber = figure('Position',[0 -10 fullscreen(3) fullscreen(4)]) % makes all images full screen
+axis off;
+set(FigureNumber,'Position',get(0,'Screensize'));
+%hold on;
+Xcoord = NaN;
+Ycoord = NaN;
+SquareCount = 0;
+    while SquareCount < Noise/3;
+        Xcoord = randi(150);
+        Ycoord = randi(150);
+        Variance = rand(1);
+        Draw = 0;
+            if (Xcoord+Variance <= 17.75 && Xcoord+Variance >= 0) ||  (Ycoord+Variance <= 11.75 && Ycoord + Variance >=0)
+                Draw = 1;
+            elseif (Xcoord+Variance <= 55.25 && Xcoord+Variance >= 32) || (Ycoord+Variance <= 49.25 && Ycoord+Variance >=20)
+                Draw = 1;
+            elseif (Xcoord+Variance <= 93.75 && Xcoord+Variance >= 69.5) || (Ycoord+Variance <= 87.75 && Ycoord+Variance >=57.5)
+                Draw = 1;
+            elseif (Xcoord+Variance <= 131.25 && Xcoord+Variance >= 108) || (Ycoord+Variance <= 126.00 && Ycoord+Variance >=97)
+                Draw = 1;
+            elseif (Xcoord+Variance <= 150 && Xcoord+Variance >= 147.5) || (Ycoord+Variance <= 150 && Ycoord+Variance >=132.5)
+                Draw = 1;
+            end
+            if Draw == 1
+            Horizontals = [Xcoord+Variance, Xcoord+Variance, Xcoord-Variance, Xcoord-Variance];
+            Verticals = [Ycoord+Variance, Ycoord-Variance, Ycoord-Variance, Ycoord+Variance];
+            patch(Horizontals, Verticals,'b');
+            SquareCount = SquareCount + 1;
+            end
+    end
+SquareCount = 0;
+        while SquareCount < Noise/3;
+        Xcoord = randi(150);
+        Ycoord = randi(150);
+        Variance = rand(1);
+        Draw = 0;
+            if (Xcoord+Variance <= 17.75 && Xcoord+Variance >= 0) ||  (Ycoord+Variance <= 11.75 && Ycoord + Variance >=0)
+                Draw = 1;
+            elseif (Xcoord+Variance <= 55.25 && Xcoord+Variance >= 32) || (Ycoord+Variance <= 49.25 && Ycoord+Variance >=20)
+                Draw = 1;
+            elseif (Xcoord+Variance <= 93.75 && Xcoord+Variance >= 69.5) || (Ycoord+Variance <= 87.75 && Ycoord+Variance >=57.5)
+                Draw = 1;
+            elseif (Xcoord+Variance <= 131.25 && Xcoord+Variance >= 108) || (Ycoord+Variance <= 126.00 && Ycoord+Variance >=97)
+                Draw = 1;
+            elseif (Xcoord+Variance <= 150 && Xcoord+Variance >= 147.5) || (Ycoord+Variance <= 150 && Ycoord+Variance >=132.5)
+                Draw = 1;
+            end
+            if Draw == 1
+            Horizontals = [Xcoord+Variance, Xcoord+Variance, Xcoord-Variance, Xcoord-Variance];
+            Verticals = [Ycoord+Variance, Ycoord-Variance, Ycoord-Variance, Ycoord+Variance];
+            patch(Horizontals, Verticals,'g');
+            SquareCount = SquareCount + 1;
+            end
+        end
+SquareCount = 0;
+        while SquareCount < Noise/3;
+        Xcoord = randi(150);
+        Ycoord = randi(150);
+        Variance = rand(1);
+        Draw = 0;
+            if (Xcoord+Variance <= 17.75 && Xcoord+Variance >= 0) ||  (Ycoord+Variance <= 11.75 && Ycoord + Variance >=0)
+                Draw = 1;
+            elseif (Xcoord+Variance <= 55.25 && Xcoord+Variance >= 32) || (Ycoord+Variance <= 49.25 && Ycoord+Variance >=20)
+                Draw = 1;
+            elseif (Xcoord+Variance <= 93.75 && Xcoord+Variance >= 69.5) || (Ycoord+Variance <= 87.75 && Ycoord+Variance >=57.5)
+                Draw = 1;
+            elseif (Xcoord+Variance <= 131.25 && Xcoord+Variance >= 108) || (Ycoord+Variance <= 126.00 && Ycoord+Variance >=97)
+                Draw = 1;
+            elseif (Xcoord+Variance <= 150 && Xcoord+Variance >= 147.5) || (Ycoord+Variance <= 150 && Ycoord+Variance >=132.5)
+                Draw = 1;
+            end
+            if Draw == 1
+            Horizontals = [Xcoord+Variance, Xcoord+Variance, Xcoord-Variance, Xcoord-Variance];
+            Verticals = [Ycoord+Variance, Ycoord-Variance, Ycoord-Variance, Ycoord+Variance];
+            patch(Horizontals, Verticals,'r');
+            SquareCount = SquareCount + 1;
+        end
+        end
+        
+
+%FIX THIS PART
+BarsMade = 0;
+PreviouslyChosenGridCellNumbers = [NaN];
+while BarsMade < Bars
+    CellSelected = randi(16);
+    RepeatCheck = (PreviouslyChosenGridCellNumbers == CellSelected);
+    SumRepeatCheck = sum(RepeatCheck);
+    if SumRepeatCheck == 0
+        PreviouslyChosenGridCellNumbers(1, end+1) = CellSelected;
+        %code to make the bars goes here
+        BarsMade = BarsMade + 1;
+    end
+end
+BlackBar = randi(16);
+%Grid Square 1 Bar
+BarXcoord = 18.75;
+BarYcoord = 131.25;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar,'w'); 
+if BlackBar == 1
+    patch(XBar,YBar,'k');
+end
+%Grid Square 2 Bar
+BarXcoord = 56.25;
+BarYcoord = 131.25;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar,'w'); 
+if BlackBar == 2
+    patch(XBar,YBar,'k'); 
+end
+%Grid Square 3 Bar
+BarXcoord = 93.75;
+BarYcoord = 131.25;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar,'w'); 
+if BlackBar == 3
+    patch(XBar,YBar,'k'); 
+end
+%Grid Square 4 Bar
+BarXcoord = 131.25;
+BarYcoord = 131.25;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar, 'w');
+if BlackBar == 4
+    patch(XBar,YBar,'k'); 
+end
+%Grid Square 5 Bar
+BarXcoord = 18.75;
+BarYcoord = 93.75;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar,'w'); 
+if BlackBar == 5
+    patch(XBar,YBar,'k'); 
+end
+%Grid Square 6 Bar
+BarXcoord = 56.25;
+BarYcoord = 93.75;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar,'w'); 
+if BlackBar == 6
+    patch(XBar,YBar,'k'); 
+end
+%Grid Square 7 Bar
+BarXcoord = 93.75;
+BarYcoord = 93.75;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar,'w'); 
+if BlackBar == 7
+    patch(XBar,YBar,'k'); 
+end
+%Grid Square 8 Bar
+BarXcoord = 131.25;
+BarYcoord = 93.75;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar, 'w');
+if BlackBar == 8
+    patch(XBar,YBar,'k'); 
+end
+%Grid Square 9 Bar
+BarXcoord = 18.75;
+BarYcoord = 56.25;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar,'w'); 
+if BlackBar == 9
+    patch(XBar,YBar,'k'); 
+end
+%Grid Square 10 Bar
+BarXcoord = 56.25;
+BarYcoord = 56.25;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar,'w'); 
+if BlackBar == 10
+    patch(XBar,YBar,'k'); 
+end
+%Grid Square 11 Bar
+BarXcoord = 93.75;
+BarYcoord = 56.25;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar,'w');
+if BlackBar == 11
+    patch(XBar,YBar,'k'); 
+end
+%Grid Square 12 Bar
+BarXcoord = 131.25;
+BarYcoord = 56.25;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar, 'w');
+if BlackBar == 12
+    patch(XBar,YBar,'k'); 
+end
+
+%Grid Square 13 Bar
+BarXcoord = 18.75;
+BarYcoord = 18.75;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar,'w'); 
+if BlackBar == 13
+    patch(XBar,YBar,'k'); 
+end
+%Grid Square 14 Bar
+BarXcoord = 56.25;
+BarYcoord = 18.75;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar,'w'); 
+if BlackBar == 14
+    patch(XBar,YBar,'k'); 
+end
+%Grid Square 15 Bar
+BarXcoord = 93.75;
+BarYcoord = 18.75;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar,'w'); 
+if BlackBar == 15
+    patch(XBar,YBar,'k'); 
+end
+%Grid Square 16 Bar
+BarXcoord = 131.25;
+BarYcoord = 18.75;
+XBar = [BarXcoord, BarXcoord, BarXcoord+12, BarXcoord+12];
+YBar = [BarYcoord, BarYcoord-6, BarYcoord-6, BarYcoord];
+patch(XBar,YBar, 'w');
+if BlackBar == 16
+    patch(XBar,YBar,'k'); 
+end
+end
