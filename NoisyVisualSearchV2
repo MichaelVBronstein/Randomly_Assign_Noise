@@ -12,3 +12,144 @@
 % Note: assumes that your files where your data are stored are called [workdir Prefix IDs(i) '_wavg_ap.erp']
 % Note: also assumes that you have files available at http://www.mathworks.com/matlabcentral/fileexchange/10465-xlswrite1 for writing data to xcel 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function[h] = NoisyVisualSearchV2(~)
+%declare globals:
+global FIXCROSSGLOBAL RESPONDSCREENGLOBAL BACKMASK
+FIXCROSSGLOBAL = imread('FixCross.tif');
+RESPONDSCREENGLOBAL =  imread('Respond.tif');
+BACKMASK = imread('BackMask.jpg');
+mark=digitalio('mcc',1);
+addline(mark,4:11,'Out');
+TimerExample(5)
+EEGInstructions = imread('EEGInstructions.jpg'); 
+UserResponse = 0;
+while UserResponse == 0
+    image(EEGInstructions); imgflag = 1; axis off;    
+%you will need to change the figure position throughout this code to fit your monitor. 
+set(gcf,'Position',[1921 177 1280 925]);
+    UserResponse = waitforbuttonpress();
+end 
+image(FIXCROSSGLOBAL); imgflag = 1; axis off; set(gcf,'Position',[1921 177 1280 925]);
+drawnow update; set(0,'currentfigure',1);
+for markervalue=1:10
+    putvalue(mark,markervalue);
+    TimerExample(4)
+    putvalue(mark,0);
+    TimerExample(2);
+end
+putvalue(mark,0);
+%marker values
+%markervalue = 0 is unused data
+%markervalue=1:10 are "baseline" resting EEG periods. 
+%markervalue=21:30 are resting EEG periods after the low noise scenario. 
+%markervalue=41:50 are resting EEG periods after the medium noise scenario. 
+%markervalue=61:70 are resting EEG periods after the high noise scenario. 
+
+%Show The Instructions / Practice:
+Practice = NoisyVisualSearchV2Practice();
+waitfor(Practice)
+LoadTheseImages = [];
+RTLogger = [];
+ResponseLogger = [];
+ImageLogger = [];
+NoiseBlockOrder = randperm(3);
+for NoiseBlockOrderer = 1:3
+    OnWhatNoiseBlock = NoiseBlockOrder(NoiseBlockOrderer);
+    LargeDomain1 = 1+240*(OnWhatNoiseBlock-1); SmallDomain1 = 61+240*(OnWhatNoiseBlock-1);
+    LargeDomain2 = 60+240*(OnWhatNoiseBlock-1); SmallDomain2 = 120+240*(OnWhatNoiseBlock-1);
+    LargeDomain3 = 121+240*(OnWhatNoiseBlock-1); SmallDomain3 = 181+240*(OnWhatNoiseBlock-1);
+    LargeDomain4 = 180+240*(OnWhatNoiseBlock-1); SmallDomain4 = 240+240*(OnWhatNoiseBlock-1);
+    LargeOrSmall = randperm(2);
+    for SetSizeOrderer = 1:2 
+        if LargeOrSmall(SetSizeOrderer) == 1
+            for NumberOfEachSubType = 1:80
+                LargePresentOrAbsent= randi(2);
+                if LargePresentOrAbsent == 1
+                    LoadTheseImages(1,end+1) = randi([LargeDomain1,LargeDomain2]);
+                else
+                    LoadTheseImages(1, end+1) = randi([LargeDomain3,LargeDomain4]);
+                end
+            end
+        elseif LargeOrSmall(SetSizeOrderer) == 2
+            for NumberOfEachSubType = 1:80
+                SmallPresentOrAbsent= randi(2);
+                if SmallPresentOrAbsent == 1
+                    LoadTheseImages(1,end+1) = randi([SmallDomain1,SmallDomain2]);
+                else
+                    LoadTheseImages(1, end+1) = randi([SmallDomain3,SmallDomain4]);
+                end
+            end
+        end
+    end
+end
+for SetMember = 1:480
+    ImageLogger(1,end + 1) = LoadTheseImages(SetMember);
+end
+for IMAGESHOWER =  1:480
+    ImageToShow1 = strcat(int2str(ImageLogger(IMAGESHOWER)), '.jpg');
+    try
+        set(0,'currentfigure',1)
+    end
+    [RT1,UserResponse1] = SeemlessFigureSwitchINDLoop6(ImageToShow1);
+    waitfor(RT1);
+    RTLogger(1,end+1) = RT1;
+    ResponseLogger(1,end+1) = UserResponse1;
+    if IMAGESHOWER == 160 || IMAGESHOWER == 320 || IMAGESHOWER == 480%seperate the noise blocks to help prevent potential carryover effects
+        image(FIXCROSSGLOBAL); imgflag = 1; axis off; set(gcf,'Position',[1921 177 1280 925]);
+        drawnow update; set(0,'currentfigure',1);
+        MarkValueMultiplier = NoiseBlockOrder(IMAGESHOWER/160);
+        MARKVALUE = MarkValueMultiplier*20 + 1;
+        for markervalue=MARKVALUE:MARKVALUE+10
+            putvalue(mark,markervalue)
+            TimerExample(4)
+            putvalue(mark,0);
+            TimerExample(2);
+        end
+        putvalue(mark,0);
+        if IMAGESHOWER == 160 || IMAGESHOWER == 320
+        READ = imread('break.tif');
+        image(READ); imgflag = 1; axis off; drawnow;
+        set(gcf,'Position',[1921 177 1280 925]);
+        pause(60)
+        READ = imread('BreakExtender.tif');
+        image(READ); imgflag = 1; axis off; drawnow;
+        set(gcf,'Position',[1921 177 1280 925]);
+        IsInput = 0;
+        while IsInput == 0
+            pause(.5);
+            IsInput = waitforbuttonpress();
+        end
+        end
+    end
+    set(0,'currentfigure',1)
+end
+READ = imread('ExperimentEnd.jpg');
+image(READ); imgflag = 1; axis off; drawnow;
+set(gcf,'Position',[1921 177 1280 925]);
+pause(12)
+
+%Now Log the results to xcel 
+LogLength = length(RTLogger);
+format bank
+DateTimeStamp = clock;
+AlreadyThereData = xlsread('Experiment03Data.xls');
+OneMoreThanLengthofData = size(AlreadyThereData,1) + 2;
+PreWrite1;
+xlswrite1('Experiment03Data.xls', DateTimeStamp, 1, strcat('A',int2str(OneMoreThanLengthofData)));
+for RowNumber = 1:LogLength
+    ImageNumberToBeLogged = ImageLogger(RowNumber);
+    UserResponseToBeLogged = ResponseLogger(RowNumber);
+    RTToBeLogged = RTLogger(RowNumber);
+    try
+        RowToWriteTo = OneMoreThanLengthofData+RowNumber;
+        xlswrite1('Experiment03Data.xls', ImageNumberToBeLogged, 1, strcat('G',int2str(RowToWriteTo)));
+        xlswrite1('Experiment03Data.xls', char(UserResponseToBeLogged), 1, strcat('H',int2str(RowToWriteTo)));
+        xlswrite1('Experiment03Data.xls', RTToBeLogged, 1, strcat('I',int2str(RowToWriteTo)));
+    catch
+        display('Data write error.')
+    end
+end
+PostWrite1;
+display('Subject Complete');
+end
