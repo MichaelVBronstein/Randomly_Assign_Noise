@@ -1,0 +1,38 @@
+% Copyright 2014 Michael V. Bronstein
+% Licensed under the Apache License, Version 2.0 (the "License");
+% you may not use this file except in compliance with the License.
+% You may obtain a copy of the License at
+% http://www.apache.org/licenses/LICENSE-2.0
+% Unless required by applicable law or agreed to in writing, software
+% distributed under the License is distributed on an "AS IS" BASIS,
+% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+% See the License for the specific language governing permissions and
+% limitations under the License.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function[RT1,UserResponse1] = SeemlessFigureSwitchINDLoop6(ImageToShow1)
+global RESPONDSCREENGLOBAL BACKMASK
+[Image1, map1] = imread(ImageToShow1);
+%main program:
+%Loop 1
+Figure1 = image(Image1); imgflag = 1; axis off;
+set(gcf,'Position',[1921 177 1280 925]); set(gcf, 'doublebuffer', 'on');
+drawnow update; set(0,'currentfigure',1)
+TIMER2 = TimerExample(.105);
+
+image(BACKMASK); imgflag = 1; axis off;
+drawnow update; tic; set(0,'currentfigure',1);
+TIMER3 = TimerExample(.03);
+
+image(RESPONDSCREENGLOBAL); imgflag = 1; axis off;
+drawnow update; tic; set(0,'currentfigure',1);
+IsInput = 0;
+while IsInput == 0
+IsInput = waitforbuttonpress(); 
+UserResponse1 = get(gcf,'currentcharacter');
+RTLogger1 = toc;
+end
+%LogThings
+RT1 = RTLogger1;
+set(0,'currentfigure',1)
+end
