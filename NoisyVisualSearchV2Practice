@@ -1,0 +1,58 @@
+
+function [h] = NoisyVisualSearchV2Practice()
+PracticeInput = 0;
+while PracticeInput == 0
+    READ = imread('InstructionsWelcome.tif');
+    image(READ); imgflag = 1; axis off; drawnow
+    set(gcf,'Position',[1921 177 1280 925]);
+    PracticeInput = waitforbuttonpress();
+end
+PracticeInput = 0;
+while PracticeInput == 0
+    READ = imread('InstructionsKeysAndWhenToPressThem.tif');
+    h = image(READ); imgflag = 1; axis off; drawnow
+    set(gcf,'Position',[1921 177 1280 925]);
+    PracticeInput = waitforbuttonpress();
+end
+PracticeInput = 0;
+while PracticeInput == 0
+    READ = imread('InstructionsImageExamples.tif');
+    h = image(READ); imgflag = 1; axis off; drawnow
+    set(gcf,'Position',[1921 177 1280 925]);
+    PracticeInput = waitforbuttonpress();
+end
+READ = imread('719.jpg');
+image(READ); imgflag = 1; axis off; drawnow
+set(0,'currentfigure',1)
+pause(4)
+READ = imread('1.jpg');
+image(READ); imgflag = 1; axis off; drawnow
+set(0,'currentfigure',1)
+pause(4)
+PracticeInput = 0;
+while PracticeInput == 0
+    READ = imread('InstructionsVerticalBars.tif'); 
+    image(READ); imgflag = 1; axis off; drawnow
+    set(gcf,'Position',[1921 177 1280 925]);
+    PracticeInput = waitforbuttonpress();
+end
+PracticeInput = 0;
+while PracticeInput == 0
+    READ = imread('InstructionsFixCross.tif'); 
+    image(READ); imgflag = 1; axis off; drawnow
+    set(gcf,'Position',[1921 177 1280 925]);
+    PracticeInput = waitforbuttonpress();
+end
+READ = imread('Respond.tif'); 
+image(READ); imgflag = 1; axis off; drawnow
+set(gcf,'Position',[1921 177 1280 925]);
+pause(3);
+PracticeInput = 0;
+while PracticeInput == 0
+    READ = imread('InstructionsEnd.tif'); 
+    image(READ); imgflag = 1; axis off; drawnow
+    set(gcf,'Position',[1921 177 1280 925]);
+    PracticeInput = waitforbuttonpress();
+end
+display('Started Main Experiment');
+end
